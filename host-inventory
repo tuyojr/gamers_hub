@@ -1,0 +1,4 @@
+[webServers]
+webServer1-AMZL2 ansible_host=publicIPwouldBeHere ansible_user=ec2-user
+webServer3-DEBI11 ansible_host=publicIPwouldBeHere ansible_user=admin
+webServer2-UBUNT ansible_host=publicIPwouldBeHere ansible_user=ubuntu
