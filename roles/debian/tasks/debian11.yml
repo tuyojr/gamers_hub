@@ -1,0 +1,70 @@
+- name: set timezone
+  timezone:
+    name: Africa/Lagos
+
+- name: Update The Apt Repository
+  apt:
+    update_cache: yes
+
+- name: Install Apache2
+  apt:
+    name: apache2
+    state: present
+
+- name: Start The Apache2 Service
+  service:
+    name: apache2
+    state: started
+
+- name: Enable The Apache2 Service
+  service:
+    name: apache2
+    enabled: yes
+
+- name: Remove The Default Apache2 HTML Page
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+- name: Create The Apache2 HTML Page
+  copy:
+    content: |
+      <h1>
+      Welcome fellow GAMERS 🎮!
+      </h1>
+      <p>
+      Currently serving gaming content from;
+      </p>
+      <h2 style="color:#D70A53">DEBIAN 11 BULLSEYE</h2>
+    dest: /var/www/html/index.html
+  register: created_file
+
+- name: Display Hostname
+  shell: echo "<h2>$HOSTNAME</h2>" >> /var/www/html/index.html
+  tags: host_name
+
+- name: Remove The Default Apache2 Configuration File
+  file:
+    path: /etc/apache2/sites-available/000-default.conf
+    state: absent
+  register: removed_file
+
+- name: Create a new Apache2 Default Configuration File
+  copy:
+    content: |
+      <VirtualHost *:80>
+        ServerName tuyojr.me
+        ServerAlias terraform-test.tuyojr.me
+        ServerAdmin olutuyod@gmail.com
+        DocumentRoot /var/www/html
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+      </VirtualHost>
+    dest: /etc/apache2/sites-available/000-default.conf
+  register: new_default_config
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: restarted

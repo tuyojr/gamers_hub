@@ -1,0 +1,11 @@
+- name: Set up Amazon Linux 2 Web Server
+  copy:
+    src: ~/terraform-aws/test/roles/amz/tasks/amz_linux.sh
+    dest: /home/ec2-user
+    owner: ec2-user
+    group: ec2-user
+    mode: 0644
+
+- name: Execute script
+  shell: sudo sh amz_linux.sh
+  register: output
